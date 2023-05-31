@@ -277,7 +277,7 @@ install-package-manager:
 
     [PyPI]
     ;SyncSchedule = "0 1 * * *"
-.
+
     [Git]
     ; PollInterval = 5m
     ; BuildRetries = 3
