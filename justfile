@@ -53,7 +53,6 @@ default:
 # Init
 # ------------------------------------------------------------------------------
 
-# Install commonly used system dependencies
 init:
     #!/bin/bash
     set -e
@@ -62,12 +61,12 @@ init:
         sudo apt-get install -y vim curl gdebi-core
     elif [ "$OS" = 'rhel-8' ]; then
         if [ -f /.dockerenv ]; then yum install -y sudo; fi
-        yum install -y vim curl
+        sudo yum install -y vim curl
         # Enable the Extra Packages for Enterprise Linux (EPEL) repository
         sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
         # Enable the CodeReady Linux Builder repository: On Premise || Public Cloud || Error condition
         sudo subscription-manager repos --enable codeready-builder-for-rhel-8-x86_64-rpms || \
-            sudo dnf install dnf-plugins-core && sudo dnf config-manager --set-enabled "codeready-builder-for-rhel-8-*-rpms" || \
+            sudo dnf install -y dnf-plugins-core && sudo dnf config-manager --set-enabled "codeready-builder-for-rhel-8-*-rpms" || \
             echo "CodeReady Linux Builder repository not enabled!"
     fi
 
@@ -289,7 +288,6 @@ install-package-manager:
         sudo systemctl restart rstudio-pm
     fi
 
-
 [private]
 install-package-manager-ubuntu-22:
     curl -f -o "package-manager.deb" "$PACKAGE_MANAGER_INSTALLER"
@@ -307,3 +305,19 @@ install-package-manager-rhel-8:
 install-docker:
     curl -fsSL https://get.docker.com -o get-docker.sh
     sudo sh ./get-docker.sh
+
+install-gh:
+    #!/bin/bash
+    set -e
+    if [ "$OS" = 'ubuntu-22' ]; then
+        type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+        && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+        && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+        && sudo apt update \
+        && sudo apt install gh -y
+    elif [ "$OS" = 'rhel-8' ]; then
+        sudo dnf install -y 'dnf-command(config-manager)'
+        sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+        sudo dnf install -y gh
+    fi

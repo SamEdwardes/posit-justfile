@@ -1,56 +1,47 @@
 # Posit justfile
 
-## Installation
-
-Install `just` [docs](https://github.com/casey/just#installation):
-
-With `sudo`:
+## Quick start
 
 ```bash
+# Install just
 curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
-```
 
-No `sudo`:
+# Download the justfile
+curl -O https://raw.githubusercontent.com/SamEdwardes/posit-justfile/main/justfile
 
-```bash
-mkdir -p $HOME/.local/bin
-export PATH="$PATH:$HOME/.local/bin"
-curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to $HOME/.local/bin
-```
+# Run init
+just init
 
-Download the justfile:
+# Install the required tools
+just install-r install-python install-workbench
 
 ```bash
-curl -O xxx
+curl -O https://raw.githubusercontent.com/SamEdwardes/posit-justfile/main/justfile
 ```
 
-docker run --platform "linux/amd64" -it --rm -v $(pwd):/app ubuntu /bin/bash
-docker run --platform "linux/amd64" -it --rm -v $(pwd):/app redhat/ubi8 /bin/bash
+## Examples
 
-## User Data
+See all of the available commands:
 
 ```bash
-#!/bin/bash
-JUSTFILE_USER="ubuntu"
-JUSTFILE_LOCATION="/home/${JUSTFILE_USER}/justfile"
-
-echo "Downloading posit justfile..."
-curl -o "$JUSTFILE_LOCATION" https://raw.githubusercontent.com/SamEdwardes/posit-justfile/main/justfile
-chown "$JUSTFILE_USER":"$JUSTFILE_USER" "$JUSTFILE_LOCATION"
-
-echo "Installing justfile..."
-curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+just
 ```
 
-To see the output run:
+Install the prerequisites:
 
 ```bash
-sudo cat /var/log/cloud-init-output.log
+just init
 ```
 
-## TMP
+Install Workbench:
 
 ```bash
-apt-get update && apt-get install -y curl && curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin && cd app
+just install-workbench
 ```
+
+Install a specific version of Workbench:
+
+```bash
+just WORKBENCH_INSTALLER='https://s3.amazonaws.com/rstudio-ide-build/electron/jammy/amd64/rstudio-2022.12.0-353-amd64.deb' install-workbench
+
 
