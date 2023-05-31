@@ -58,7 +58,7 @@ init:
     set -e
     if [ "$OS" = 'ubuntu-22' ]; then
         if [ -f /.dockerenv ]; then apt-get update && apt-get install -y sudo; else sudo apt-get update; fi
-        sudo apt-get install -y vim curl gdebi-core
+        sudo apt-get install -y vim curl gdebi-core build-essential
     elif [ "$OS" = 'rhel-8' ]; then
         if [ -f /.dockerenv ]; then yum install -y sudo; fi
         sudo yum install -y vim curl
