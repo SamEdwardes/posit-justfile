@@ -13,10 +13,7 @@ curl -O https://raw.githubusercontent.com/SamEdwardes/posit-justfile/main/justfi
 just init
 
 # Install the required tools
-just install-r install-python install-workbench
-
-```bash
-curl -O https://raw.githubusercontent.com/SamEdwardes/posit-justfile/main/justfile
+just install-workbench
 ```
 
 ## Examples
